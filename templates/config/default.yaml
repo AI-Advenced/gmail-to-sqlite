@@ -1,0 +1,112 @@
+# Gmail to SQLite - Default Configuration
+# This file contains the default settings for the application.
+# Copy to local.yaml and modify as needed.
+
+# Database configuration
+database:
+  path: "data/messages.db"
+  enable_logging: false
+  connection_pool_size: 20
+  timeout: 30
+  pragma_settings:
+    journal_mode: "WAL"
+    synchronous: "NORMAL"
+    cache_size: -64000  # 64MB cache
+    temp_store: "MEMORY"
+    mmap_size: 268435456  # 256MB mmap
+
+# Synchronization settings
+sync:
+  workers: 4
+  max_retry_attempts: 3
+  retry_delay_seconds: 5
+  batch_size: 100
+  rate_limit_requests_per_minute: 250
+  enable_incremental_sync: true
+  full_sync_interval_hours: 24
+  deleted_message_check_interval_hours: 6
+
+# Caching configuration
+cache:
+  enabled: true
+  type: "memory"  # memory, redis, file
+  ttl_seconds: 3600
+  max_size: 1000
+  redis_url: null  # "redis://localhost:6379/0"
+  file_cache_dir: "data/cache"
+
+# Attachment handling
+attachments:
+  enabled: false
+  download_path: "data/attachments"
+  max_size_mb: 100
+  allowed_types:
+    - "pdf"
+    - "doc"
+    - "docx" 
+    - "txt"
+    - "jpg"
+    - "jpeg"
+    - "png"
+    - "gif"
+  extract_text: true
+  virus_scan_enabled: false
+
+# Analytics and reporting
+analytics:
+  enabled: true
+  metrics_retention_days: 90
+  generate_daily_reports: true
+  generate_weekly_reports: true
+  generate_monthly_reports: true
+  export_formats:
+    - "json"
+    - "csv"
+
+# Web interface
+web:
+  enabled: false
+  host: "localhost"
+  port: 8080
+  debug: false
+  secret_key: null
+  cors_enabled: true
+  auth_enabled: true
+  session_timeout_minutes: 60
+
+# Monitoring and metrics
+monitoring:
+  enabled: false
+  prometheus_enabled: false
+  prometheus_port: 9090
+  log_level: "INFO"
+  log_file: "logs/gmail-to-sqlite.log"
+  log_rotation: true
+  log_max_size: "10MB"
+  log_backup_count: 5
+  health_check_interval: 300
+
+# Backup configuration
+backup:
+  enabled: true
+  backup_path: "data/backups"
+  schedule_cron: "0 2 * * *"  # Daily at 2 AM
+  retention_days: 30
+  compression_enabled: true
+  encryption_enabled: false
+  encryption_key_file: null
+
+# Plugin system
+plugins:
+  enabled: true
+  plugin_paths:
+    - "plugins"
+  auto_load: true
+  enabled_plugins: []
+  disabled_plugins: []
+
+# Gmail API settings
+credentials_file: "credentials.json"
+token_file: "token.json"
+scopes:
+  - "https://www.googleapis.com/auth/gmail.readonly"
